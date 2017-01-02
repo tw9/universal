@@ -4,6 +4,7 @@ package com.wrqzn.base.db.biz;
 import com.wrqzn.base.db.bean.DataSource;
 import com.wrqzn.base.db.bean.DefaultData;
 import com.wrqzn.base.db.bean.QueryParam;
+import com.wrqzn.base.db.bean.QueryResult;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -92,17 +93,17 @@ public class BaseQuery {
 //	public static List<Map<String,Object>> runSql(DataSource dataSource,String sql){
 //		return run(dataSource,sql);
 //	}
-
-//	public static List<Map<String,Object>> run(String tableName){
-//		return run(DefaultData.getBaseDataSource(),tableName,null);
-//	}
-
-	public static List<Map<String,Object>> run(String sql){
-		return query(DefaultData.getBaseDataSource(),sql,null);
+//
+	public static QueryResult findAll(String tableName){
+		return new QueryResult( query(DefaultData.getBaseDataSource()," select * from " + tableName ,null) );
 	}
 
-	public static List<Map<String,Object>> run(QueryParam queryParam){
-		return query(DefaultData.getBaseDataSource(),queryParam.getSql(),queryParam.getParam());
+	public static QueryResult run(String sql){
+		return new QueryResult(query(DefaultData.getBaseDataSource(),sql,null));
+	}
+
+	public static QueryResult run(QueryParam queryParam){
+		return new QueryResult( query(DefaultData.getBaseDataSource(),queryParam.getSql(),queryParam.getParam()) );
 	}
 
 

@@ -1,10 +1,12 @@
 package com.wrqzn.api.controller;
 
 import com.wrqzn.base.db.bean.QueryParam;
+import com.wrqzn.base.db.bean.QueryResult;
 import com.wrqzn.base.db.biz.BaseQuery;
+import com.wrqzn.base.permission.function.FunctionBiz;
+import com.wrqzn.base.permission.function.FunctionImpl;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -20,6 +22,9 @@ public class UniversalControll {
 			,@PathVariable("p1") String p1
 			,@PathVariable("p2") String p2
 						 ){
+		if (null == param.get("userId")) {
+			return "用户ID為空";
+		}
 		QueryParam queryParam = new QueryParam();
 		queryParam.addSql("select ");
 		queryParam.addSql(" id ");
@@ -28,13 +33,18 @@ public class UniversalControll {
 		queryParam.addSql(" where url_path = ? ");
 		queryParam.addSql(" and http_type = 'get' ");
 		queryParam.addParam( "/"+ p1+ "/"+p2);
+		QueryResult result = BaseQuery.run(queryParam);
 
-		String sql = BaseQuery.run(queryParam).get(0).get("sql_content").toString();
-
-		List<Map<String,Object>> data = BaseQuery.run(sql);
-
-		return data.toString();
-
+		Long userId = Long.valueOf(param.get("userId").toString());
+		Integer funcId = Integer.valueOf(result.getFirst("id").toString());
+		FunctionBiz functionBiz = new FunctionImpl();
+		if ( functionBiz.userAccess( funcId , functionBiz.userFunctions(userId) ) ) {
+			String sql = result.getFirst().get("sql_content").toString();
+			QueryResult data = BaseQuery.run(sql);
+			return data.toString();
+		} else {
+			return "無權限";
+		}
 
 
 	}
