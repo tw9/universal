@@ -1,2 +1,6 @@
 rootProject.name = 'universal'
+include 'api'
+include 'baseDB'
+include 'basePermission'
+include 'baseBiz'
 
