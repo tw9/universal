@@ -4,8 +4,11 @@ import com.wrqzn.base.db.bean.DataSource;
 import com.wrqzn.base.db.bean.DatabaseType;
 import com.wrqzn.base.db.bean.DefaultData;
 import com.wrqzn.base.db.biz.BaseQuery;
+import com.wrqzn.base.permission.user.UserBiz;
+import com.wrqzn.base.permission.user.UserImpl;
 import org.junit.Test;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +36,28 @@ public class UserTest {
 	@Test
 	public void test(){
 //		List<Map<String,Object>> list = BaseQuery.run("user_password");
-		List<Map<String,Object>> list = BaseQuery.runSql("select id,password from user_password");
-		System.out.println(list.size());
+//		List<Map<String,Object>> list = BaseQuery.runSql("select id,password from user_password");
+//		System.out.println(list.size());
+		System.out.println(String.class.getName());
+		System.out.println(Integer.class.getName());
+		System.out.println(int.class.getName());
+		System.out.println(Double.class.getName());
+		System.out.println(Long.class.getName());
+		System.out.println(double.class.getName());
+		System.out.println(long.class.getName());
+
+		System.out.println(java.sql.Date.class.getName());
+		System.out.println(java.sql.Time.class.getName());
+		System.out.println(java.sql.Timestamp.class.getName());
+
 	}
+
+
+	@Test
+	public void fjdk(){
+		UserBiz user = new UserImpl();
+		System.out.println(user.findByPassword("abc"));
+	}
+
 
 }
