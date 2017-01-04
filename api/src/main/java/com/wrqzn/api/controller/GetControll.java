@@ -15,9 +15,10 @@ import java.util.Map;
  * E-mail : i@wrqzn.com
  */
 @RestController
-public class UniversalControll {
+@RequestMapping(method = RequestMethod.GET)
+public class GetControll {
 
-	@RequestMapping(value = "/{p1}/{p2}",method = RequestMethod.GET)
+	@RequestMapping(value = "/{p1}/{p2}")
 	public String param2(@RequestParam Map<String,Object> param
 			,@PathVariable("p1") String p1
 			,@PathVariable("p2") String p2

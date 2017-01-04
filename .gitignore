@@ -137,3 +137,12 @@ gradle-app.setting
 
 # # Work around https://youtrack.jetbrains.com/issue/IDEA-116898
 # gradle/wrapper/gradle-wrapper.properties
+
+
+# angular
+web-dev/node_modules/
+web-dev/e2e/*.js
+web-dev/e2e/*.js.map
+web-dev/app/*.js
+web-dev/app/*.js.map
+

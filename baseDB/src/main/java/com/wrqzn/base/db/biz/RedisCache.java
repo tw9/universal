@@ -1,7 +1,12 @@
 //package com.wrqzn.base.db.biz;
 //
 //
+//import com.wrqzn.base.db.bean.DataSource;
+//import redis.clients.jedis.Jedis;
+//import redis.clients.jedis.JedisPool;
+//
 //import java.util.HashMap;
+//import java.util.Map;
 //
 //
 ///**
@@ -13,7 +18,7 @@
 //
 //	private static Map<String,JedisPool> pools = new HashMap<>();
 //
-//	private static  Jedis getConnect(DataSource dataSource){
+//	private static Jedis getConnect(DataSource dataSource){
 //		String key = dataSource.getRedisHost()+":"+dataSource.getRedisPort() ;
 //		JedisPool connectPool = pools.get(key);
 //		if(null == connectPool ) {
