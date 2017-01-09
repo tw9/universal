@@ -5,6 +5,8 @@ import com.wrqzn.taskflow.tasks.Phone;
 import com.wrqzn.taskflow.tasks.SMS;
 import com.wrqzn.taskflow.works.TaskFlow;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,18 +19,38 @@ import java.util.Map;
 public class Test {
 	public static void main(String[] args) {
 
-		Task mail = new Email();
-		Map<String,Object> param = new HashMap<>();
-		param.put("userName","tw");
-		mail.setArgs(param);
-		Task sms = new SMS();
-		Task phone = new Phone();
-		TaskFlow taskFlow  = new TaskFlow("test", Arrays.asList(mail,sms,phone));
-		taskFlow.start();
-		System.out.println("mainend");
+//		Task mail = new Email();
+//		Map<String,Object> param = new HashMap<>();
+//		param.put("userName","tw");
+//		mail.setArgs(param);
+//		Task sms = new SMS();
+//		Task phone = new Phone();
+//		TaskFlow taskFlow  = new TaskFlow("test", Arrays.asList(mail,sms,phone));
+//		taskFlow.start();
+//		System.out.println("mainend");
 
 
-		Task amail = new Email();
+//		Task amail = new Email();
+		Task amail = null ;
+
+		try {
+			Class<?> dd = Class.forName("com.wrqzn.taskflow.tasks.Email");
+			Class<?>[] params = {};
+			Constructor  constructor = dd.getDeclaredConstructor(params);
+			amail = (Task) constructor.newInstance();
+			System.out.println(amail.success);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (NoSuchMethodException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			e.printStackTrace();
+		}
+
 		Map<String,Object> parama = new HashMap<>();
 		parama.put("userName","abc");
 		amail.setArgs(parama);

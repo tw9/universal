@@ -39,7 +39,9 @@ public class TaskFlow {
 
 	public void afterTask(int index){
 		Map<String,Object> result  = tasks.get(index).getResult();
-		result.putAll(commonsParam);
+		if(null != commonsParam ) {
+			result.putAll(commonsParam);
+		}
 //		System.out.println( Thread.activeCount() );
 //		System.out.println(result);
 		index ++ ;
