@@ -2,29 +2,28 @@ package com.wrqzn.api.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Map;
 
 /**
- * Created by WANG, RUIQING on 1/2/17
+ * Created by WANG, RUIQING on 1/5/17
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
 @RestController
-@RequestMapping("/demo")
-public class Demo {
+@RequestMapping("/cfg")
+public class ConfigController {
 
 
-	@RequestMapping(value = "/test",method = RequestMethod.GET)
-	public String test(){
-		return "hello";
-	}
 
-	@RequestMapping(value = "/path",method = RequestMethod.GET)
-	public String filepath(){
+
+	@RequestMapping(value = "/db",method = RequestMethod.GET)
+	public String filepath(@RequestParam Map<String,Object> param){
 		File file = new File("universal.cfg");
 		if (!file.exists()){
 			try {
@@ -40,4 +39,6 @@ public class Demo {
 		return "hello:"+ file.getAbsolutePath();
 	}
 
+
 }
+
