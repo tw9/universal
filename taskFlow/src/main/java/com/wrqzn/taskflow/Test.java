@@ -35,19 +35,16 @@ public class Test {
 
 		try {
 			Class<?> dd = Class.forName("com.wrqzn.taskflow.tasks.Email");
-			Class<?>[] params = {};
-			Constructor  constructor = dd.getDeclaredConstructor(params);
-			amail = (Task) constructor.newInstance();
+//			Class<?>[] params = {};
+//			Constructor  constructor = dd.getDeclaredConstructor(params);
+//			amail = (Task) constructor.newInstance();
+			amail = (Task) dd.newInstance();
 			System.out.println(amail.success);
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
 		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
 			e.printStackTrace();
 		}
 

@@ -4,4 +4,5 @@ include 'baseDB'
 include 'basePermission'
 include 'baseBiz'
 include 'taskFlow'
+include 'dbRecord'
 
