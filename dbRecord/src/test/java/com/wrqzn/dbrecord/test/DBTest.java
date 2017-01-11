@@ -1,12 +1,16 @@
 package com.wrqzn.dbrecord.test;
 
+import com.sun.deploy.config.Config;
+import com.wrqzn.dbrecord.ConfigData;
 import com.wrqzn.dbrecord.DataSource;
 import com.wrqzn.dbrecord.DatabaseType;
-import com.wrqzn.dbrecord.DefaultData;
 import com.wrqzn.dbrecord.op.QueryResult;
 import com.wrqzn.dbrecord.op.Select;
+import com.wrqzn.dbrecord.op.biz.SelectFactory;
 import com.wrqzn.dbrecord.op.impl.SelectMySql;
 import org.junit.Test;
+
+import java.util.Map;
 
 
 /**
@@ -24,18 +28,16 @@ public class DBTest {
 		dataSource.setSchema("tw");
 		dataSource.setUserName("root");
 		dataSource.setPassword("adminroot");
-		DefaultData.addBaseDataSource(dataSource);
+		ConfigData.addBaseDataSource(dataSource);
 	}
 
 
 	@Test
 	public void test(){
-		Select select = new SelectMySql<>(UserEntity.class);
-//		Select<UserEntity> select = new SelectMySql<>();
-		QueryResult<UserEntity> result = select.query();
-
+		Select select = SelectFactory.getSelect(ConfigData.getBaseDataSource());
+		select.addSql("select age,name from user");
+		QueryResult result = select.query();
 		System.out.println(result);
-
 	}
 
 	@Test
@@ -43,13 +45,10 @@ public class DBTest {
 		UserEntity userEntity = new UserEntity();
 		QueryResult<UserEntity> result = userEntity.findAll();
 		QueryResult<UserEntity> result1 = userEntity.findOne(1);
-
 		userEntity.addSql("select id, name from user");
 		QueryResult<UserEntity> result2 = userEntity.query();
-
 		System.out.println(result.toString());
 	}
-
 
 
 

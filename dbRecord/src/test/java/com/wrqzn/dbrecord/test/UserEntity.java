@@ -1,7 +1,7 @@
 package com.wrqzn.dbrecord.test;
 
+import com.wrqzn.dbrecord.ConfigData;
 import com.wrqzn.dbrecord.DataSource;
-import com.wrqzn.dbrecord.DefaultData;
 import com.wrqzn.dbrecord.model.BaseEntity;
 
 import java.sql.ResultSet;
@@ -61,6 +61,6 @@ public class UserEntity extends BaseEntity<Integer> {
 
 	@Override
 	public DataSource getDataSource() {
-		return DefaultData.getBaseDataSource();
+		return ConfigData.getBaseDataSource();
 	}
 }

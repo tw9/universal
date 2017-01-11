@@ -3,6 +3,7 @@ package com.wrqzn.dbrecord.model;
 import com.wrqzn.dbrecord.DataSource;
 import com.wrqzn.dbrecord.op.QueryResult;
 import com.wrqzn.dbrecord.op.Select;
+import com.wrqzn.dbrecord.op.biz.SelectFactory;
 
 import java.sql.ResultSet;
 import java.util.List;
@@ -17,7 +18,7 @@ public abstract class BaseEntity<T> extends BaseMethod {
 	protected T id;
 
 //	protected transient Select select = new SelectMySql<>(this.getClass(),getDataSource());
-	protected transient Select select = getSelectInstance(this.getClass(),getDataSource());
+	protected transient Select select = SelectFactory.getSelect(this.getClass(),getDataSource());
 
 	public abstract DataSource getDataSource();
 	public abstract String getTableName();

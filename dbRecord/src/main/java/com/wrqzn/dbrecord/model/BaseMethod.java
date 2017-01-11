@@ -38,15 +38,14 @@ public class BaseMethod {
 		return list;
 	}
 
-
-	public <T> Select<T> getSelectInstance(Class<T> clz, DataSource dataSource){
-		Select<T> select = null ;
-		switch (dataSource.getDatabaseType()) {
-			case mysql:
-				select = new SelectMySql<>(clz,dataSource);
-				break;
-
-		}
-		return select;
-	}
+//	public <T> Select<T> getSelectInstance(Class<T> clz, DataSource dataSource){
+//		Select<T> select = null ;
+//		switch (dataSource.getDatabaseType()) {
+//			case mysql:
+//				select = new SelectMySql<>(clz,dataSource);
+//				break;
+//
+//		}
+//		return select;
+//	}
 }

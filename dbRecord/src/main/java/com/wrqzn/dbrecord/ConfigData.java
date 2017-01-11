@@ -8,7 +8,7 @@ import java.util.Map;
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
-public class DefaultData {
+public class ConfigData {
 
 	public static final String dbBase = "dbBase";
 	public static final String dbBiz = "dbBiz";

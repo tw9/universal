@@ -24,6 +24,10 @@ public class SelectMySql<T> extends Select<T> {
 		super(type, dataSource);
 	}
 
+	public SelectMySql(DataSource dataSource) {
+		super(dataSource);
+	}
+
 	public SelectMySql() {
 		super();
 	}
@@ -31,12 +35,7 @@ public class SelectMySql<T> extends Select<T> {
 	@Override
 	public QueryResult query() {
 		QueryResult<T> result = new QueryResult<T>();
-		List<T>  list = null;
-		if ( Map.class != type ) {
-			list = DBQuery.run(this,type);
-		} else {
-			list = (List<T>) DBQuery.run(this);
-		}
+		List<T>  list = DBQuery.run(this,type);
 		result.setContent( list );
 		resetSql();
 		return result;

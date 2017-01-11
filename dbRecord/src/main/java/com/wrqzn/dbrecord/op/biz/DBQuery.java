@@ -20,43 +20,35 @@ public class DBQuery {
 
 
 	public static  <T> List<T> run(Select select,Class<T> clz){
-		List<T> content = query(select.getDataSource(),select.getSql(),select.getParameters(),clz);
+		List<T> content = query(select,clz);
 		return content;
 	}
 
-	public static   List<Map<String,Object>> run(Select select){
-		List<Map<String,Object>> content = new ArrayList<>();
-		Map<String,Object> u1 = new HashMap<>();
-		u1.put("key","hello");
-		u1.put("time","323232");
-		content.add(u1);
+//	public static   List<Map<String,Object>> run(Select select){
+//		List<Map<String,Object>> content = new ArrayList<>();
+//		Map<String,Object> u1 = new HashMap<>();
+//		u1.put("key","hello");
+//		u1.put("time","323232");
+//		content.add(u1);
+//
+//		return content;
+//	}
 
-		return content;
-	}
+	private static <T> List<T> query(Select select, Class<T> clz){
+		DataSource dataSource = select.getDataSource();
+		String sql = select.getSql() ;
+		List<Object> param = select.getParameters();
 
-
-
-	private static <T> List<T> query(DataSource dataSource, String sql, List<Object> param,Class<T> clz){
 		List<T> content = null;
 		Connection conn = null;
 		PreparedStatement stmt = null;
-		List<Map<String,Object>> list = new ArrayList<>();
 		ResultSet resultSet = null;
 		try {
 			Class.forName(dataSource.getDriver());
 			conn = DriverManager.getConnection(dataSource.getUrl(),dataSource.getUserName(),dataSource.getPassword());
 			conn.setAutoCommit(true);
 			stmt = conn.prepareStatement(sql);
-//java.lang.String
-//java.lang.Integer
-//int
-//java.lang.Double
-//java.lang.Long
-//double
-//long
-//java.sql.Date
-//java.sql.Time
-//java.sql.Timestamp
+//java.lang.String //java.lang.Integer //int //java.lang.Double //java.lang.Long //double //long //java.sql.Date //java.sql.Time //java.sql.Timestamp
 			if (null != param) {
 				for (int i = 0; i < param.size() ; i++) {
 					Object obj = param.get(i);
@@ -78,25 +70,40 @@ public class DBQuery {
 
 				}
 			}
-//			System.out.println(sql);
 			System.out.println(stmt.toString());
 			resultSet = stmt.executeQuery();
 
-
-			try {
-				T object = clz.newInstance();
-				Method method = clz.getDeclaredMethod("formatResult",ResultSet.class);
-				content = (List<T>) method.invoke(object,resultSet);
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-			} catch (InstantiationException e) {
-				e.printStackTrace();
+			if ( Map.class != select.getType()) {
+				try {
+					T object = clz.newInstance();
+					Method method = clz.getDeclaredMethod("formatResult",ResultSet.class);
+					content = (List<T>) method.invoke(object,resultSet);
+				} catch (NoSuchMethodException e) {
+					e.printStackTrace();
+				} catch (InvocationTargetException e) {
+					e.printStackTrace();
+				} catch (IllegalAccessException e) {
+					e.printStackTrace();
+				} catch (InstantiationException e) {
+					e.printStackTrace();
+				}
+			} else {
+				content = new ArrayList();
+				ResultSetMetaData md = null;
+				try {
+					md = resultSet.getMetaData();
+					int columns = md.getColumnCount();
+					while (resultSet.next()){
+						HashMap row = new HashMap(columns);
+						for(int i=1; i<=columns; ++i){
+							row.put(md.getColumnName(i),resultSet.getObject(i));
+						}
+						content.add((T) row);
+					}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
 			}
-
 			resultSet.close();
 			stmt.close();
 			conn.close();

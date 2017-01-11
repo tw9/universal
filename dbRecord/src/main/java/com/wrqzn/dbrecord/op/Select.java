@@ -25,6 +25,11 @@ public abstract class Select<T> extends DBOperate {
 		this.type= type;
 	}
 
+	public Select(DataSource dataSource){
+		this.dataSource = dataSource;
+		type = (Class<T>) Map.class;
+	}
+
 	public Select() {
 		type = (Class<T>) Map.class;
 	}
@@ -42,5 +47,13 @@ public abstract class Select<T> extends DBOperate {
 
 	public void setShowFiedls(String[] showFiedls) {
 		this.showFiedls = showFiedls;
+	}
+
+	public Class<T> getType() {
+		return type;
+	}
+
+	public void setType(Class<T> type) {
+		this.type = type;
 	}
 }
