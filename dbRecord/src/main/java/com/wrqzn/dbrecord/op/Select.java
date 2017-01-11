@@ -1,21 +1,36 @@
 package com.wrqzn.dbrecord.op;
 
+
 import com.wrqzn.dbrecord.DataSource;
+
+import java.util.Map;
 
 /**
  * Created by WANG, RUIQING on 1/10/17
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
-public abstract class Select extends DBOperate {
+public abstract class Select<T> extends DBOperate {
 
 
-
+	protected Class<T> type;
 	protected String[] showFiedls;
 
 
-	public Select() {
+	public Select(Class<T> type) {
+		this.type= type;
 	}
+	public Select(Class<T> type, DataSource dataSource){
+		this.dataSource = dataSource;
+		this.type= type;
+	}
+
+	public Select() {
+		type = (Class<T>) Map.class;
+	}
+
+
+
 
 	public abstract QueryResult query();
 	public abstract QueryResult query(QueryResult pageQuery);

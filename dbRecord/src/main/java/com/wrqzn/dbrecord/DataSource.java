@@ -93,7 +93,7 @@ public class DataSource {
 
 		switch (databaseType){
 			case mysql:
-//				url = DefaultData.getUrlHead(DatabaseType.mysql) + host ;
+				url = DefaultData.getUrlHead(DatabaseType.mysql) + host ;
 				if (null != port) {
 					url += ":"+port;
 				}
@@ -111,7 +111,7 @@ public class DataSource {
 	}
 
 	public String getDriver() {
-//		this.driver = DefaultData.getDriver(DatabaseType.mysql);
+		this.driver = DefaultData.getDriver(DatabaseType.mysql);
 		return driver;
 	}
 

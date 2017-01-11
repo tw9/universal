@@ -1,10 +1,11 @@
 package com.wrqzn.dbrecord.test;
 
-import com.wrqzn.dbrecord.BaseEntity;
+import com.wrqzn.dbrecord.DataSource;
+import com.wrqzn.dbrecord.DefaultData;
+import com.wrqzn.dbrecord.model.BaseEntity;
 
 import java.sql.ResultSet;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by WANG, RUIQING on 1/10/17
@@ -13,7 +14,7 @@ import java.util.List;
  */
 public class UserEntity extends BaseEntity<Integer> {
 	private String name;
-	private int age;
+	private Integer age;
 
 	public UserEntity() {
 	}
@@ -26,30 +27,40 @@ public class UserEntity extends BaseEntity<Integer> {
 		this.name = name;
 	}
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 
-
 	@Override
 	public List<UserEntity> formatResult(ResultSet resultSet) {
-		List<UserEntity> list = new ArrayList<>();
-		UserEntity u1 = new UserEntity();
-		u1.setId(2);
-		u1.setName("tom");
-		u1.setAge(33);
+		List<UserEntity> data = new ArrayList<>();
+		List<Map<String,Object>> mapData = resultToList(resultSet);
+		mapData.forEach( d -> {
+			UserEntity userEntity = new UserEntity();
+			userEntity.setId((Integer) d.get("id"));
+			userEntity.setName((String) d.get("name"));
+			userEntity.setAge((Integer) d.get("age"));
+			data.add(userEntity);
+		});
+		return data;
+	}
 
-		UserEntity u2 = new UserEntity();
-		u2.setId(5);
-		u2.setName("jerry");
-		u2.setAge(34);
+	@Override
+	public List<String> selectAllFields() {
+		return Arrays.asList("id","name","age");
+	}
 
-		list.add(u1);
-		list.add(u2);
-		return list;
+	@Override
+	public String getTableName() {
+		return "user";
+	}
+
+	@Override
+	public DataSource getDataSource() {
+		return DefaultData.getBaseDataSource();
 	}
 }

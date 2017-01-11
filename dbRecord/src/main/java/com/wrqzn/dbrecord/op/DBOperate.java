@@ -23,7 +23,7 @@ public abstract class DBOperate {
 	}
 
 	public void addSql(String sqlSegment){
-		sqlBuilder.append(sqlSegment);
+		sqlBuilder.append(" "+sqlSegment+" ");
 	}
 	public void addParameter(Object arg){
 		parameters.add(arg);
@@ -34,6 +34,12 @@ public abstract class DBOperate {
 			sql = sqlBuilder.toString();
 		}
 		return sql;
+	}
+
+	public void resetSql(){
+		sqlBuilder.delete(0,sqlBuilder.length());
+		sql = null;
+		parameters.clear();
 	}
 
 	public void setSql(String sql) {
@@ -48,4 +54,11 @@ public abstract class DBOperate {
 		this.dataSource = dataSource;
 	}
 
+	public List<Object> getParameters() {
+		return parameters;
+	}
+
+	public void setParameters(List<Object> parameters) {
+		this.parameters = parameters;
+	}
 }

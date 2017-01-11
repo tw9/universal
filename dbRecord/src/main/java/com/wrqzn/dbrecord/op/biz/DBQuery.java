@@ -20,22 +20,7 @@ public class DBQuery {
 
 
 	public static  <T> List<T> run(Select select,Class<T> clz){
-		List<T> content = new ArrayList<T>();
-//		ResultSet resultSet = query(select.getDataSource(),select.getSql(),select.getParameters());
-		ResultSet resultSet = null;
-		try {
-			T object = clz.newInstance();
-			Method method = clz.getDeclaredMethod("formatResult",ResultSet.class);
-			content = (List<T>) method.invoke(object,resultSet);
-		} catch (NoSuchMethodException e) {
-			e.printStackTrace();
-		} catch (InvocationTargetException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		}
+		List<T> content = query(select.getDataSource(),select.getSql(),select.getParameters(),clz);
 		return content;
 	}
 
@@ -51,8 +36,8 @@ public class DBQuery {
 
 
 
-
-	private static ResultSet query(DataSource dataSource, String sql, List<Object> param){
+	private static <T> List<T> query(DataSource dataSource, String sql, List<Object> param,Class<T> clz){
+		List<T> content = null;
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		List<Map<String,Object>> list = new ArrayList<>();
@@ -96,6 +81,22 @@ public class DBQuery {
 //			System.out.println(sql);
 			System.out.println(stmt.toString());
 			resultSet = stmt.executeQuery();
+
+
+			try {
+				T object = clz.newInstance();
+				Method method = clz.getDeclaredMethod("formatResult",ResultSet.class);
+				content = (List<T>) method.invoke(object,resultSet);
+			} catch (NoSuchMethodException e) {
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			}
+
 			resultSet.close();
 			stmt.close();
 			conn.close();
@@ -104,7 +105,7 @@ public class DBQuery {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			return resultSet;
+			return content;
 		}
 
 	}

@@ -1,5 +1,6 @@
 package com.wrqzn.dbrecord.op.impl;
 
+import com.wrqzn.dbrecord.DataSource;
 import com.wrqzn.dbrecord.op.QueryResult;
 import com.wrqzn.dbrecord.op.Select;
 import com.wrqzn.dbrecord.op.biz.DBQuery;
@@ -12,17 +13,19 @@ import java.util.Map;
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
-public class SelectMySql<T> extends Select {
+public class SelectMySql<T> extends Select<T> {
 
-
-	final Class<T> type;
 
 	public SelectMySql(Class<T> type) {
-		this.type= type;
+		super(type);
+	}
+
+	public SelectMySql(Class<T> type, DataSource dataSource) {
+		super(type, dataSource);
 	}
 
 	public SelectMySql() {
-		type = (Class<T>) Map.class;
+		super();
 	}
 
 	@Override
@@ -35,6 +38,7 @@ public class SelectMySql<T> extends Select {
 			list = (List<T>) DBQuery.run(this);
 		}
 		result.setContent( list );
+		resetSql();
 		return result;
 	}
 
