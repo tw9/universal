@@ -44,8 +44,9 @@ public class DBQuery {
 		PreparedStatement stmt = null;
 		ResultSet resultSet = null;
 		try {
-			Class.forName(dataSource.getDriver());
-			conn = DriverManager.getConnection(dataSource.getUrl(),dataSource.getUserName(),dataSource.getPassword());
+//			Class.forName(dataSource.getDriver());
+//			conn = DriverManager.getConnection(dataSource.getUrl(),dataSource.getUserName(),dataSource.getPassword());
+			conn = dataSource.getConnection();
 			conn.setAutoCommit(true);
 			stmt = conn.prepareStatement(sql);
 //java.lang.String //java.lang.Integer //int //java.lang.Double //java.lang.Long //double //long //java.sql.Date //java.sql.Time //java.sql.Timestamp
@@ -104,11 +105,11 @@ public class DBQuery {
 					e.printStackTrace();
 				}
 			}
-			resultSet.close();
-			stmt.close();
-			conn.close();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+//			resultSet.close();
+//			stmt.close();
+//			conn.close();
+//		} catch (ClassNotFoundException e) {
+//			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {

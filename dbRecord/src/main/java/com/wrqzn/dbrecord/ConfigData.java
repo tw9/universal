@@ -49,13 +49,16 @@ public class ConfigData {
 
 
 	public static void addDataSource(String key , DataSource dataSource){
+		dataSource.setConnectionPool();
 		dataSourceMap.put(key,dataSource);
 	}
 	public static void addBaseDataSource(DataSource dataSource){
+		dataSource.setConnectionPool();
 		dataSourceMap.put(dbBase,dataSource);
 	}
 
 	public static void addBizDataSource(DataSource dataSource){
+		dataSource.setConnectionPool();
 		dataSourceMap.put(dbBiz,dataSource);
 	}
 

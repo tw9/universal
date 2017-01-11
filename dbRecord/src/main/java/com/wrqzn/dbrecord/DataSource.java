@@ -1,6 +1,11 @@
 package com.wrqzn.dbrecord;
 
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
+import java.sql.Connection;
+import java.sql.SQLException;
+
 /**
  * Created by WANG, RUIQING on 12/8/16
  * Twitter : @taylorwang789
@@ -24,6 +29,8 @@ public class DataSource {
 	private Integer redisPort = 6379;
 
 
+	private ComboPooledDataSource comboPooledDataSource;
+
 
 
 	public DataSource() {
@@ -40,6 +47,32 @@ public class DataSource {
 		this.port = port;
 		this.databaseType = databaseType;
 	}
+
+
+	public void setConnectionPool(){
+		ComboPooledDataSource cpds = new ComboPooledDataSource();
+		cpds.setJdbcUrl(getUrl());
+		cpds.setUser(getUserName());
+		cpds.setPassword(getPassword());
+
+		// Optional Settings
+		cpds.setInitialPoolSize(5);
+		cpds.setMinPoolSize(5);
+		cpds.setAcquireIncrement(5);
+		cpds.setMaxPoolSize(20);
+		cpds.setMaxStatements(100);
+		comboPooledDataSource = cpds;
+	}
+
+	public Connection getConnection(){
+		try {
+			return comboPooledDataSource.getConnection();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 	public String getUserName() {
 		return userName;
