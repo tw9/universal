@@ -18,8 +18,17 @@ public class SMS extends Task {
 		}
 		result = args;
 		result.put("SMS","send sms " + System.currentTimeMillis());
-		System.out.println("send sms");
+		System.out.println( taskFlow.getFlowName() + "send sms");
+
 		success = true;
 		taskFlow.afterTask(getIndex());
+	}
+
+	@Override
+	public void rollback() {
+
+		System.out.println( taskFlow.getFlowName() + "rollback sms");
+		rollback = true;
+		taskFlow.rollback(getIndex());
 	}
 }

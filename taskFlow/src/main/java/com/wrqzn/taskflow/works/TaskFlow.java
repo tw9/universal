@@ -10,7 +10,7 @@ import java.util.Map;
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
-public class TaskFlow {
+public class TaskFlow  implements Runnable{
 
 	private int flowId;
 	private String flowName;
@@ -30,11 +30,12 @@ public class TaskFlow {
 		this.tasks = tasks;
 	}
 
-	public void start(){
+
+	@Override
+	public void run() {
 		tasks.get(0).setIndex(0);
 		tasks.get(0).setTaskFlow(this);
-		Thread thread = new Thread(tasks.get(0));
-		thread.start();
+		tasks.get(0).run();
 	}
 
 	public void afterTask(int index){
@@ -42,21 +43,31 @@ public class TaskFlow {
 		if(null != commonsParam ) {
 			result.putAll(commonsParam);
 		}
-//		System.out.println( Thread.activeCount() );
-//		System.out.println(result);
-		index ++ ;
-		if (tasks.size() > index) {
-			tasks.get(index).setArgs(result);
-			tasks.get(index).setIndex(index);
-			tasks.get(index).setTaskFlow(this);
-			Thread thread = new Thread(tasks.get(index));
-			thread.start();
+
+		if ( tasks.get(index).isSuccess() == true ) {
+			index ++ ;
+			if (tasks.size() > index) {
+				tasks.get(index).setArgs(result);
+				tasks.get(index).setIndex(index);
+				tasks.get(index).setTaskFlow(this);
+				tasks.get(index).run();
+			} else {
+				System.out.println( flowName + " task flow end " );
+			}
+
 		} else {
-			System.out.println( flowName + " task flow end " );
-		}
+			rollback(++index);
+
 
 	}
 
+	public void rollback(int index){
+		index--;
+
+		if (index>=0) {
+			tasks.get(index).rollback();
+		}
+	}
 
 	////
 
@@ -92,4 +103,5 @@ public class TaskFlow {
 	public void setCommonsParam(Map<String, Object> commonsParam) {
 		this.commonsParam = commonsParam;
 	}
+
 }

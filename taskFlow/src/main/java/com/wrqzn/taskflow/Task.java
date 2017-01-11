@@ -9,16 +9,22 @@ import java.util.Map;
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
-public abstract class Task implements Runnable{
+public abstract class Task {
 
 	protected Map<String,Object> args;
 	protected Map<String,Object> result;
 	protected boolean success = false;
+	protected boolean rollback = false;
 	protected int index;
 	protected TaskFlow taskFlow;
 
 	public Task() {
 	}
+
+
+	public abstract void run();
+	public abstract void rollback();
+
 
 	public Task(Map<String, Object> args) {
 		this.args = args;
@@ -54,5 +60,21 @@ public abstract class Task implements Runnable{
 
 	public void setResult(Map<String, Object> result) {
 		this.result = result;
+	}
+
+	public boolean isSuccess() {
+		return success;
+	}
+
+	public void setSuccess(boolean success) {
+		this.success = success;
+	}
+
+	public boolean isRollback() {
+		return rollback;
+	}
+
+	public void setRollback(boolean rollback) {
+		this.rollback = rollback;
 	}
 }
