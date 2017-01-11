@@ -1,5 +1,7 @@
 package com.wrqzn.dbrecord.op;
 
+import com.wrqzn.dbrecord.DataSource;
+
 /**
  * Created by WANG, RUIQING on 1/10/17
  * Twitter : @taylorwang789
@@ -9,7 +11,6 @@ public abstract class Select extends DBOperate {
 
 
 
-	protected String[] selectFields;
 	protected String[] showFiedls;
 
 
@@ -19,14 +20,6 @@ public abstract class Select extends DBOperate {
 	public abstract QueryResult query();
 	public abstract QueryResult query(QueryResult pageQuery);
 
-
-	public String[] getSelectFields() {
-		return selectFields;
-	}
-
-	public void setSelectFields(String[] selectFields) {
-		this.selectFields = selectFields;
-	}
 
 	public String[] getShowFiedls() {
 		return showFiedls;

@@ -5,6 +5,7 @@ import com.wrqzn.dbrecord.op.Select;
 import com.wrqzn.dbrecord.op.biz.DBQuery;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by WANG, RUIQING on 1/10/17
@@ -20,11 +21,19 @@ public class SelectMySql<T> extends Select {
 		this.type= type;
 	}
 
+	public SelectMySql() {
+		type = (Class<T>) Map.class;
+	}
+
 	@Override
 	public QueryResult query() {
 		QueryResult<T> result = new QueryResult<T>();
-		result.setCurrentPage(333);
-		List<T> list = DBQuery.run(type);
+		List<T>  list = null;
+		if ( Map.class != type ) {
+			list = DBQuery.run(this,type);
+		} else {
+			list = (List<T>) DBQuery.run(this);
+		}
 		result.setContent( list );
 		return result;
 	}
