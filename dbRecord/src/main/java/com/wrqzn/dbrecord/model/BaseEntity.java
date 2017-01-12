@@ -27,6 +27,8 @@ public abstract class BaseEntity<T> extends BaseMethod {
 
 
 
+
+
 	public QueryResult findAll(){
 		buildSql();
 		return select.query();

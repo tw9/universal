@@ -4,12 +4,14 @@ import com.sun.deploy.config.Config;
 import com.wrqzn.dbrecord.ConfigData;
 import com.wrqzn.dbrecord.DataSource;
 import com.wrqzn.dbrecord.DatabaseType;
+import com.wrqzn.dbrecord.op.Insert;
 import com.wrqzn.dbrecord.op.QueryResult;
 import com.wrqzn.dbrecord.op.Select;
 import com.wrqzn.dbrecord.op.biz.SelectFactory;
 import com.wrqzn.dbrecord.op.impl.SelectMySql;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -50,6 +52,12 @@ public class DBTest {
 		System.out.println(result.toString());
 	}
 
+	@Test
+	public void inserttest(){
+		Insert insert = new Insert();
+		Map<String,Object> newUser = new HashMap<>();
+		insert.save("user",newUser);
+	}
 
 
 }
