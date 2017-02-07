@@ -1,16 +1,10 @@
 package com.wrqzn.base.test;
 
-import com.wrqzn.base.db.bean.DataSource;
-import com.wrqzn.base.db.bean.DatabaseType;
-import com.wrqzn.base.db.bean.DefaultData;
-import com.wrqzn.base.db.biz.BaseQuery;
-import com.wrqzn.base.permission.user.UserBiz;
-import com.wrqzn.base.permission.user.UserImpl;
+import com.wrqzn.dbrecord.ConfigData;
+import com.wrqzn.dbrecord.DataSource;
+import com.wrqzn.dbrecord.DatabaseType;
 import org.junit.Test;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
 
 
 /**
@@ -29,7 +23,7 @@ public class UserTest {
 		dataSource.setSchema("testdb");
 
 
-		DefaultData.addBaseDataSource(dataSource);
+		ConfigData.addBaseDataSource(dataSource);
 
 	}
 
@@ -55,8 +49,6 @@ public class UserTest {
 
 	@Test
 	public void fjdk(){
-		UserBiz user = new UserImpl();
-		System.out.println(user.findByPassword("abc"));
 	}
 
 
