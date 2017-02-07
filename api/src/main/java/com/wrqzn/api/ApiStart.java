@@ -1,8 +1,8 @@
 package com.wrqzn.api;
 
-import com.wrqzn.base.db.bean.DataSource;
-import com.wrqzn.base.db.bean.DatabaseType;
-import com.wrqzn.base.db.bean.DefaultData;
+import com.wrqzn.dbrecord.ConfigData;
+import com.wrqzn.dbrecord.DataSource;
+import com.wrqzn.dbrecord.DatabaseType;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -16,14 +16,15 @@ public class ApiStart {
 	public static void main(String[] args) {
 
 
-		DataSource dataSource = new DataSource("192.168.9.183",3306);
+		DataSource dataSource = new DataSource();
 		dataSource.setDatabaseType(DatabaseType.mysql);
+		dataSource.setHost("127.0.0.1");
+		dataSource.setPort(3306);
+		dataSource.setSchema("tw");
 		dataSource.setUserName("root");
-		dataSource.setPassword("password");
-		dataSource.setSchema("testdb");
+		dataSource.setPassword("adminroot");
+		ConfigData.addBaseDataSource(dataSource);
 
-
-		DefaultData.addBaseDataSource(dataSource);
 
 		SpringApplication.run(ApiStart.class,args);
 	}

@@ -52,21 +52,42 @@ public abstract class DBEntity<T> extends BaseMethod {
 
 	private void buildSql(){
 		select.addSql("select");
+//		Map<String,Object> data = getFieldData();
+//		List<String> fields = new ArrayList<>();
+//		data.forEach( (k,v) -> {fields.add(k);});
+//		if (null == fields ) {
+//			select.addSql("*");
+//		} else {
+//			for (int i = 0; i < fields.size() ; i++) {
+//				if (i != 0 ) {
+//					select.addSql(",");
+//				}
+//				select.addSql(fields.get(i));
+//			}
+//		}
+		select.addSql(getAllField());
+		select.addSql("from");
+		select.addSql(getTableName());
+	}
+
+	public String getAllField(){
 		Map<String,Object> data = getFieldData();
 		List<String> fields = new ArrayList<>();
+
+		StringBuilder stringBuilder = new StringBuilder();
+
 		data.forEach( (k,v) -> {fields.add(k);});
 		if (null == fields ) {
-			select.addSql("*");
+			stringBuilder.append("*");
 		} else {
 			for (int i = 0; i < fields.size() ; i++) {
 				if (i != 0 ) {
-					select.addSql(",");
+					stringBuilder.append(",");
 				}
-				select.addSql(fields.get(i));
+				stringBuilder.append(fields.get(i));
 			}
 		}
-		select.addSql("from");
-		select.addSql(getTableName());
+		return " " + stringBuilder.toString() + " ";
 	}
 
 

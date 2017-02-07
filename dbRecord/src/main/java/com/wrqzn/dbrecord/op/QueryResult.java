@@ -34,6 +34,24 @@ public class QueryResult<T> {
 		this.pageSize = pageSize;
 	}
 
+
+	public boolean isNull(){
+		if (null == content || content.size() == 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean notNull(){
+		if (null != content && content.size() > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+
 	public Integer getCurrentPage() {
 		return currentPage;
 	}

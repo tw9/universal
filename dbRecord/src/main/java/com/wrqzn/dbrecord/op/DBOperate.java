@@ -33,6 +33,10 @@ public abstract class DBOperate<T> {
 		parameters.add(arg);
 	}
 
+	public void addData(Object arg){
+		parameters.add(arg);
+	}
+
 	public String getSql() {
 		if ( null == sql && null != sqlBuilder ) {
 			sql = sqlBuilder.toString();

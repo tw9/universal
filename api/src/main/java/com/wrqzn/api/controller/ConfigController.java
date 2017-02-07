@@ -24,6 +24,7 @@ public class ConfigController {
 
 	@RequestMapping(value = "/db",method = RequestMethod.GET)
 	public String filepath(@RequestParam Map<String,Object> param){
+
 		File file = new File("universal.cfg");
 		if (!file.exists()){
 			try {
