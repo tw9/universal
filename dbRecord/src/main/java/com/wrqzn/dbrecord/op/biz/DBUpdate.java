@@ -3,7 +3,10 @@ package com.wrqzn.dbrecord.op.biz;
 import com.wrqzn.dbrecord.DataSource;
 import com.wrqzn.dbrecord.op.DBOperate;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -11,14 +14,14 @@ import java.util.List;
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
-public class DBInsert {
+public class DBUpdate {
 
 
 //	public static  <T> T run(Insert<T> insert, Class<T> clz){
 //		return null;
 //	}
 
-	public  static int insert(DBOperate insert){
+	public  static int update(DBOperate insert){
 		DataSource dataSource = insert.getDataSource();
 		String sql = insert.getSql() ;
 		List<Object> param = insert.getParameters();
@@ -30,8 +33,7 @@ public class DBInsert {
 		try {
 			conn = dataSource.getConnection();
 			conn.setAutoCommit(true);
-//			stmt = conn.prepareStatement(sql);
-			stmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
+			stmt = conn.prepareStatement(sql);
 			if (null != param) {
 				for (int i = 0; i < param.size() ; i++) {
 					Object obj = param.get(i);
@@ -56,9 +58,6 @@ public class DBInsert {
 			System.out.println(stmt.toString());
 
 			stmt.executeUpdate();
-			ResultSet result = stmt.getGeneratedKeys();
-			result.next();
-			content = result.getInt(1);
 
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -5,4 +5,5 @@ include 'basePermission'
 include 'baseBiz'
 include 'taskFlow'
 include 'dbRecord'
+include 'webtest'
 

@@ -13,11 +13,26 @@ public class QueryResult<T> {
 	private Integer pageSize;
 	private Integer totalPage;
 	private Integer totalCount;
-	private boolean hasPrevPage = true;
-	private boolean hasNextPage = true;
+	private boolean hasPrevPage = false;
+	private boolean hasNextPage = false;
 	private List<T> content;
 
 
+
+	public QueryResult() {
+		this.currentPage = 1;
+		this.pageSize = 10;
+	}
+
+	public QueryResult(Integer currentPage) {
+		this.currentPage = currentPage;
+		this.pageSize = 10;
+	}
+
+	public QueryResult(Integer currentPage, Integer pageSize) {
+		this.currentPage = currentPage;
+		this.pageSize = pageSize;
+	}
 
 	public Integer getCurrentPage() {
 		return currentPage;
@@ -74,4 +89,12 @@ public class QueryResult<T> {
 	public void setContent(List<T> content) {
 		this.content = content;
 	}
+
+	public int getStartRow(){
+		return  (currentPage -1) * pageSize;
+	}
+	public int getEndRow(){
+		return currentPage * pageSize;
+	}
+
 }

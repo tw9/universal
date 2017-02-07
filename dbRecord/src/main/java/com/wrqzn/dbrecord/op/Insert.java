@@ -3,6 +3,8 @@ package com.wrqzn.dbrecord.op;
 import com.wrqzn.dbrecord.DataSource;
 import com.wrqzn.dbrecord.op.biz.DBInsert;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -11,42 +13,63 @@ import java.util.Map;
  * E-mail : i@wrqzn.com
  */
 public class Insert<T> extends DBOperate {
-	protected Class<T> type;
-
 
 	public Insert(Class<T> type) {
-		this.type= type;
+		this.entityType = type;
 	}
 	public Insert(Class<T> type, DataSource dataSource){
 		this.dataSource = dataSource;
-		this.type= type;
+		this.entityType = type;
 	}
 
 	public Insert(DataSource dataSource){
 		this.dataSource = dataSource;
-		type = (Class<T>) Map.class;
+		entityType = (Class<T>) Map.class;
 	}
 
 	public Insert() {
-		type = (Class<T>) Map.class;
+		entityType = (Class<T>) Map.class;
+	}
+
+	@Override
+	public QueryResult run() {
+		QueryResult queryResult = new QueryResult();
+		DBInsert.insert(this);
+		return queryResult;
 	}
 
 
-	public <T> T  save(T t){
-		return null;
+	public int insert(String table,Map<String,Object> data){
+		List<String> keys = new ArrayList<>();
+		List<Object> values = new ArrayList<>();
+		data.forEach( (k,v) -> {
+				if ( null != v ) {
+					keys.add(k);
+					values.add(v);
+				}
+				});
+
+		this.addSql( "insert into " + table );
+		this.addSql("(");
+		for (int i = 0; i < keys.size() ; i++) {
+			if (i !=0 ) {
+				this.addSql(",");
+			}
+			this.addSql(keys.get(i));
+		}
+		this.addSql(") values (");
+
+		for (int i = 0; i < values.size(); i++) {
+			if ( i != 0 ) {
+				this.addSql(",");
+			}
+			this.addParameter(values.get(i));
+		}
+		this.addSql(")");
+
+
+		int autoId = DBInsert.insert(this);
+		return autoId;
 	}
-
-	public Map<String,Object> save(String tableName , Map<String,Object> mapData) {
-		addSql("insert into");
-		addSql(tableName);
-		addSql("(");
-
-
-		DBInsert.run(this, (Class<T>) Map.class);
-
-		return mapData;
-
-	}
-
 
 }

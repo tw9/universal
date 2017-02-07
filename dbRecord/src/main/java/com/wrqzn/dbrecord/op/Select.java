@@ -13,34 +13,40 @@ import java.util.Map;
 public abstract class Select<T> extends DBOperate {
 
 
-	protected Class<T> type;
 	protected String[] showFiedls;
 
 
+
+// constructor
 	public Select(Class<T> type) {
-		this.type= type;
+		super();
+		this.entityType= type;
 	}
 	public Select(Class<T> type, DataSource dataSource){
+		super();
 		this.dataSource = dataSource;
-		this.type= type;
+		this.entityType= type;
 	}
 
 	public Select(DataSource dataSource){
+		super();
 		this.dataSource = dataSource;
-		type = (Class<T>) Map.class;
+		entityType= (Class<T>) Map.class;
 	}
+
 
 	public Select() {
-		type = (Class<T>) Map.class;
+		entityType = (Class<T>) Map.class;
 	}
 
 
 
-
+// method
 	public abstract QueryResult query();
 	public abstract QueryResult query(QueryResult pageQuery);
 
 
+// getter setter
 	public String[] getShowFiedls() {
 		return showFiedls;
 	}
@@ -49,11 +55,5 @@ public abstract class Select<T> extends DBOperate {
 		this.showFiedls = showFiedls;
 	}
 
-	public Class<T> getType() {
-		return type;
-	}
 
-	public void setType(Class<T> type) {
-		this.type = type;
-	}
 }

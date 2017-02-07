@@ -3,10 +3,10 @@ package com.wrqzn.dbrecord.op.impl;
 import com.wrqzn.dbrecord.DataSource;
 import com.wrqzn.dbrecord.op.QueryResult;
 import com.wrqzn.dbrecord.op.Select;
+import com.wrqzn.dbrecord.op.biz.DBPageQuery;
 import com.wrqzn.dbrecord.op.biz.DBQuery;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by WANG, RUIQING on 1/10/17
@@ -33,9 +33,14 @@ public class SelectMySql<T> extends Select<T> {
 	}
 
 	@Override
+	public QueryResult run() {
+		return query();
+	}
+
+	@Override
 	public QueryResult query() {
 		QueryResult<T> result = new QueryResult<T>();
-		List<T>  list = DBQuery.run(this,type);
+		List<T>  list = DBQuery.query(this,entityType);
 		result.setContent( list );
 		resetSql();
 		return result;
@@ -43,6 +48,9 @@ public class SelectMySql<T> extends Select<T> {
 
 	@Override
 	public QueryResult query(QueryResult pageQuery) {
-		return null;
+		String sql = this.getSql();
+		String cntSql = "select count(1) as cnt " + sql.substring(sql.indexOf("from")) ;
+		String dtSql = sql + "limit " + pageQuery.getStartRow() +"," + pageQuery.getPageSize()  ;
+		return DBPageQuery.query(this,entityType,pageQuery,cntSql,dtSql);
 	}
 }

@@ -1,6 +1,7 @@
 package com.wrqzn.dbrecord.op.biz;
 
 import com.wrqzn.dbrecord.DataSource;
+import com.wrqzn.dbrecord.op.QueryResult;
 import com.wrqzn.dbrecord.op.Select;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,31 +17,23 @@ import java.util.Map;
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
-public class DBQuery {
+public class DBPageQuery {
 
 
-//	public static  <T> List<T> run(Select select,Class<T> clz){
-//		List<T> content = query(select,clz);
-//		return content;
-//	}
-
-
-	public  static <T> List<T> query(Select select, Class<T> clz){
+	public  static <T> QueryResult query(Select select, Class<T> clz , QueryResult result,String cntSql,String dtSql){
 		DataSource dataSource = select.getDataSource();
-		String sql = select.getSql() ;
 		List<Object> param = select.getParameters();
-
 		List<T> content = null;
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		PreparedStatement cntstmt = null;
+		ResultSet cntresultSet = null;
 		ResultSet resultSet = null;
 		try {
-//			Class.forName(dataSource.getDriver());
-//			conn = DriverManager.getConnection(dataSource.getUrl(),dataSource.getUserName(),dataSource.getPassword());
 			conn = dataSource.getConnection();
 			conn.setAutoCommit(true);
-			stmt = conn.prepareStatement(sql);
-//java.lang.String //java.lang.Integer //int //java.lang.Double //java.lang.Long //double //long //java.sql.Date //java.sql.Time //java.sql.Timestamp
+			cntstmt = conn.prepareStatement(cntSql);
+			stmt = conn.prepareStatement(dtSql);
 			if (null != param) {
 				for (int i = 0; i < param.size() ; i++) {
 					Object obj = param.get(i);
@@ -64,6 +57,11 @@ public class DBQuery {
 			}
 			System.out.println(stmt.toString());
 			resultSet = stmt.executeQuery();
+
+			cntresultSet = stmt.executeQuery();
+			cntresultSet.next();
+			result.setTotalCount( resultSet.getInt("cnt") );
+
 
 			if ( Map.class != select.getEntityType()) {
 				try {
@@ -96,15 +94,10 @@ public class DBQuery {
 					e.printStackTrace();
 				}
 			}
-//			resultSet.close();
-//			stmt.close();
-//			conn.close();
-//		} catch (ClassNotFoundException e) {
-//			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
-			return content;
+			return result;
 		}
 
 	}

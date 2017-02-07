@@ -1,48 +1,60 @@
 package com.wrqzn.dbrecord.model;
 
 import com.wrqzn.dbrecord.DataSource;
-import com.wrqzn.dbrecord.op.QueryResult;
-import com.wrqzn.dbrecord.op.Select;
+import com.wrqzn.dbrecord.op.*;
 import com.wrqzn.dbrecord.op.biz.SelectFactory;
 
 import java.sql.ResultSet;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by WANG, RUIQING on 1/10/17
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
-public abstract class BaseEntity<T> extends BaseMethod {
+public abstract class DBEntity<T> extends BaseMethod {
 
 	protected T id;
 
-	protected transient Select select = SelectFactory.getSelect(this.getClass(),getDataSource());
+
+	protected Select select = SelectFactory.getSelect(this.getClass(),getDataSource());
+	protected Save save = new Save(this.getClass(),getDataSource());
+	protected Delete delete= new Delete(this.getClass(),getDataSource());
 
 	public abstract DataSource getDataSource();
 	public abstract String getTableName();
-	public abstract List<String> selectAllFields();
+	public abstract Map<String,Object> getFieldData();
 	public abstract List<?> formatResult(ResultSet resultSet);
 
 
 
 
-// select
+
 	public QueryResult findAll(){
 		buildSql();
 		return select.query();
 	}
 
+	public QueryResult pageQuery(QueryResult queryResult){
+		buildSql();
+		return select.query(queryResult);
+	}
+
+
 	public QueryResult findOne(T primaryKey){
 		buildSql();
-		select.addSql("where id = ? ");
+		select.addSql("where id = ");
 		select.addParameter(primaryKey);
 		return select.query();
 	}
 
 	private void buildSql(){
 		select.addSql("select");
-		List<String> fields = selectAllFields();
+		Map<String,Object> data = getFieldData();
+		List<String> fields = new ArrayList<>();
+		data.forEach( (k,v) -> {fields.add(k);});
 		if (null == fields ) {
 			select.addSql("*");
 		} else {
@@ -72,9 +84,11 @@ public abstract class BaseEntity<T> extends BaseMethod {
 
 // insert
 	public void save(){
-
+		save.save(this);
 	}
-
+	public void delete(){
+		delete.delete(this);
+	}
 
 
 	// getter setter
