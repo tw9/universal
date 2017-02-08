@@ -6,4 +6,5 @@ include 'baseBiz'
 include 'taskFlow'
 include 'dbRecord'
 include 'webtest'
+include 'testservlet'
 
