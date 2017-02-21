@@ -58,9 +58,9 @@ public class DBPageQuery {
 			System.out.println(stmt.toString());
 			resultSet = stmt.executeQuery();
 
-			cntresultSet = stmt.executeQuery();
-			cntresultSet.next();
-			result.setTotalCount( resultSet.getInt("cnt") );
+//			cntresultSet = cntstmt.executeQuery();
+//			cntresultSet.next();
+//			result.setTotalCount( resultSet.getInt(0) );
 
 
 			if ( Map.class != select.getEntityType()) {
@@ -93,6 +93,7 @@ public class DBPageQuery {
 				} catch (SQLException e) {
 					e.printStackTrace();
 				}
+				result.setContent(content);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

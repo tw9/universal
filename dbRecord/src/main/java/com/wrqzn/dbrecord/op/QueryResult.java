@@ -30,8 +30,16 @@ public class QueryResult<T> {
 	}
 
 	public QueryResult(Integer currentPage, Integer pageSize) {
-		this.currentPage = currentPage;
-		this.pageSize = pageSize;
+		if (null == currentPage) {
+			this.currentPage = 1;
+		} else {
+			this.currentPage = currentPage;
+		}
+		if (null == pageSize) {
+			this.pageSize = 10;
+		} else {
+			this.pageSize = pageSize;
+		}
 	}
 
 

@@ -18,16 +18,16 @@ public class Phone extends Task {
 		}
 		result = args;
 		result.put("phone","make phone call " + System.currentTimeMillis());
-		System.out.println( taskFlow.getFlowName() + "make phone call");
+//		System.out.println( taskFlow.getFlowName() + "make phone call");
 		success = false;
-		taskFlow.afterTask(getIndex());
+//		taskFlow.afterTask(getIndex());
 	}
 
 	@Override
 	public void rollback() {
 
-		System.out.println( taskFlow.getFlowName() + "rollback phone ");
+//		System.out.println( taskFlow.getFlowName() + "rollback phone ");
 		rollback = true;
-		taskFlow.rollback(getIndex());
+//		taskFlow.rollback(getIndex());
 	}
 }

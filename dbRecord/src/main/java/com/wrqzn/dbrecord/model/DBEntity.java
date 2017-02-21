@@ -98,10 +98,14 @@ public abstract class DBEntity<T> extends BaseMethod {
 	public void addParameter(Object object){
 		select.addParameter(object);
 	}
-
-	public QueryResult query(){
-		return select.query();
+	public void addData(Object arg){
+		select.addData(arg);
 	}
+
+
+//	public QueryResult query(){
+//		return select.query();
+//	}
 
 // insert
 	public void save(){

@@ -16,7 +16,7 @@ public abstract class Task {
 	protected boolean success = false;
 	protected boolean rollback = false;
 	protected int index;
-	protected TaskFlow taskFlow;
+//	protected TaskFlow taskFlow;
 
 	public Task() {
 	}
@@ -38,13 +38,13 @@ public abstract class Task {
 		this.index = index;
 	}
 
-	public TaskFlow getTaskFlow() {
-		return taskFlow;
-	}
-
-	public void setTaskFlow(TaskFlow taskFlow) {
-		this.taskFlow = taskFlow;
-	}
+//	public TaskFlow getTaskFlow() {
+//		return taskFlow;
+//	}
+//
+//	public void setTaskFlow(TaskFlow taskFlow) {
+//		this.taskFlow = taskFlow;
+//	}
 
 	public Map<String, Object> getArgs() {
 		return args;

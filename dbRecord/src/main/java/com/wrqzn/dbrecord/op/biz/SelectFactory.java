@@ -4,6 +4,8 @@ import com.wrqzn.dbrecord.DataSource;
 import com.wrqzn.dbrecord.op.Select;
 import com.wrqzn.dbrecord.op.impl.SelectMySql;
 
+import java.util.Map;
+
 /**
  * Created by WANG, RUIQING on 1/11/17
  * Twitter : @taylorwang789
@@ -16,7 +18,7 @@ public class SelectFactory {
 		Select select = null;
 		switch (dataSource.getDatabaseType()){
 			case mysql:
-				select = new SelectMySql(dataSource);
+				select = new SelectMySql(Map.class,dataSource);
 				break;
 		}
 		return select;

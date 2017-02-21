@@ -34,7 +34,7 @@ public class TaskFlow  implements Runnable{
 	@Override
 	public void run() {
 		tasks.get(0).setIndex(0);
-		tasks.get(0).setTaskFlow(this);
+//		tasks.get(0).setTaskFlow(this);
 		tasks.get(0).run();
 	}
 
@@ -49,7 +49,7 @@ public class TaskFlow  implements Runnable{
 			if (tasks.size() > index) {
 				tasks.get(index).setArgs(result);
 				tasks.get(index).setIndex(index);
-				tasks.get(index).setTaskFlow(this);
+//				tasks.get(index).setTaskFlow(this);
 				tasks.get(index).run();
 			} else {
 				System.out.println( flowName + " task flow end " );
