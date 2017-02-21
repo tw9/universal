@@ -1,14 +1,18 @@
 package com.wrqzn.taskflow.works;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.TimerTask;
 
 /**
  * Created by WANG, RUIQING on 1/9/17
  * Twitter : @taylorwang789
  * E-mail : i@wrqzn.com
  */
-public class TaskFlow  implements Runnable{
+public class TaskFlow  extends TimerTask
+//		implements Runnable
+{
 
 	private int flowId;
 	private String flowName;

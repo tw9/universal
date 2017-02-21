@@ -18,16 +18,16 @@ import java.util.Map;
 public class Test {
 	public static void main(String[] args) {
 
-		Task mail = new Email();
-		Map<String,Object> param = new HashMap<>();
-		param.put("userName","tw");
-		mail.setArgs(param);
-		Task sms = new SMS();
-		Task phone = new Phone();
-		TaskFlow taskFlow  = new TaskFlow("test   ", Arrays.asList(mail,sms,phone));
-		Thread mainT = new Thread(taskFlow);
-		mainT.start();
-		System.out.println("mainend");
+//		Task mail = new Email();
+//		Map<String,Object> param = new HashMap<>();
+//		param.put("userName","tw");
+//		mail.setArgs(param);
+//		Task sms = new SMS();
+//		Task phone = new Phone();
+//		TaskFlow taskFlow  = new TaskFlow("test   ", Arrays.asList(mail,sms,phone));
+//		Thread mainT = new Thread(taskFlow);
+//		mainT.start();
+//		System.out.println("mainend");
 
 
 //		Task amail = null ;

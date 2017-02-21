@@ -41,13 +41,17 @@ create table task_timer(
 id int ,
 task_id int,
 active int,  -- 0:not active  1:active
+start_time datetime,
+end_time datetime,
+first_run datetime,
 v1_year varchar(15),
 v2_month varchar(15),
 v3_day varchar(15),
-v4_workday varchar(15),
+v4_weekday varchar(15),
 v5_hour varchar(15),
 v6_minute varchar(15),
 v7_second varchar(15)
 );
+
 
 
