@@ -1,6 +1,6 @@
 package com.wrqzn.taskflow.tasks;
 
-import com.wrqzn.taskflow.Task;
+import com.wrqzn.taskflow.works.Task;
 
 
 
@@ -18,17 +18,11 @@ public class Email extends Task {
 			e.printStackTrace();
 		}
 		result = args;
-		result.put("email","send eamil " + System.currentTimeMillis());
-		System.out.println( taskFlow.getFlowName() + "send Email");
-		success = true;
-		taskFlow.afterTask(getIndex());
+		System.out.println("send eamil " + System.currentTimeMillis());
 	}
 
 	@Override
 	public void rollback() {
 
-		System.out.println( taskFlow.getFlowName() + "rollback Email");
-		rollback = true;
-		taskFlow.rollback(getIndex());
 	}
 }

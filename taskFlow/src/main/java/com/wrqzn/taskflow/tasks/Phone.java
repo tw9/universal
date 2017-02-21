@@ -1,6 +1,6 @@
 package com.wrqzn.taskflow.tasks;
 
-import com.wrqzn.taskflow.Task;
+import com.wrqzn.taskflow.works.Task;
 
 
 /**
@@ -17,9 +17,9 @@ public class Phone extends Task {
 			e.printStackTrace();
 		}
 		result = args;
-		result.put("phone","make phone call " + System.currentTimeMillis());
+		System.out.println("make phone call " + System.currentTimeMillis());
 //		System.out.println( taskFlow.getFlowName() + "make phone call");
-		success = false;
+//		success = false;
 //		taskFlow.afterTask(getIndex());
 	}
 
@@ -27,7 +27,6 @@ public class Phone extends Task {
 	public void rollback() {
 
 //		System.out.println( taskFlow.getFlowName() + "rollback phone ");
-		rollback = true;
 //		taskFlow.rollback(getIndex());
 	}
 }

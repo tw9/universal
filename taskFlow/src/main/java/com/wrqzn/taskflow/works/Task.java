@@ -1,7 +1,7 @@
-package com.wrqzn.taskflow;
+package com.wrqzn.taskflow.works;
 
-import com.wrqzn.taskflow.works.TaskFlow;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -11,12 +11,11 @@ import java.util.Map;
  */
 public abstract class Task {
 
-	protected Map<String,Object> args;
-	protected Map<String,Object> result;
-	protected boolean success = false;
-	protected boolean rollback = false;
+	protected Map<String,Object> args = new HashMap<>();
+	protected Map<String,String> pipe_args = new HashMap<>();
+	protected Map<String,Object> result = new HashMap<>();
+	protected boolean success = true;
 	protected int index;
-//	protected TaskFlow taskFlow;
 
 	public Task() {
 	}
@@ -24,6 +23,18 @@ public abstract class Task {
 
 	public abstract void run();
 	public abstract void rollback();
+
+
+	public void addCommonsParameter(Map<String,Object> commonsParam){
+		if (null != commonsParam) {
+			this.args.putAll(commonsParam);
+		}
+	}
+	public void addPipeArgs(Map<String,Object> previousResult){
+		pipe_args.forEach( (k,v) -> {
+			this.args.put(v,previousResult.get(k));
+		});
+	}
 
 
 	public Task(Map<String, Object> args) {
@@ -37,14 +48,6 @@ public abstract class Task {
 	public void setIndex(int index) {
 		this.index = index;
 	}
-
-//	public TaskFlow getTaskFlow() {
-//		return taskFlow;
-//	}
-//
-//	public void setTaskFlow(TaskFlow taskFlow) {
-//		this.taskFlow = taskFlow;
-//	}
 
 	public Map<String, Object> getArgs() {
 		return args;
@@ -70,11 +73,12 @@ public abstract class Task {
 		this.success = success;
 	}
 
-	public boolean isRollback() {
-		return rollback;
+	public Map<String, String> getPipe_args() {
+		return pipe_args;
 	}
 
-	public void setRollback(boolean rollback) {
-		this.rollback = rollback;
+	public void setPipe_args(Map<String, String> pipe_args) {
+		this.pipe_args = pipe_args;
 	}
+
 }

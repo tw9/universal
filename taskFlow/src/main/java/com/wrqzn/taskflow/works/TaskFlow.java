@@ -1,7 +1,5 @@
 package com.wrqzn.taskflow.works;
 
-import com.wrqzn.taskflow.Task;
-
 import java.util.List;
 import java.util.Map;
 
@@ -33,43 +31,30 @@ public class TaskFlow  implements Runnable{
 
 	@Override
 	public void run() {
-		tasks.get(0).setIndex(0);
-//		tasks.get(0).setTaskFlow(this);
-		tasks.get(0).run();
-	}
-
-	public void afterTask(int index){
-		Map<String,Object> result  = tasks.get(index).getResult();
-		if(null != commonsParam ) {
-			result.putAll(commonsParam);
-		}
-
-		if ( tasks.get(index).isSuccess() == true ) {
-			index ++ ;
-			if (tasks.size() > index) {
-				tasks.get(index).setArgs(result);
-				tasks.get(index).setIndex(index);
-//				tasks.get(index).setTaskFlow(this);
-				tasks.get(index).run();
+		for (int i = 0; i < tasks.size() ; i++) {
+			tasks.get(i).addCommonsParameter(commonsParam);
+			tasks.get(i).run();
+			if (tasks.get(i).isSuccess()){
+				// success , run next
+				if (i !=0 && i < tasks.size() -1 ) {
+					tasks.get(i+1).addPipeArgs(tasks.get(i).getResult());
+				}
 			} else {
-				System.out.println( flowName + " task flow end " );
+				// rollback
+				rollback(i);
+				break;
 			}
-
-		} else {
-			rollback(++index);
 		}
 
 	}
 
 	public void rollback(int index){
-		index--;
-
-		if (index>=0) {
-			tasks.get(index).rollback();
+		for (int i = index ; i >= 0 ; i--) {
+			tasks.get(i).rollback();
+			tasks.get(i).setSuccess(false);
 		}
 	}
 
-	////
 
 
 	public int getFlowId() {
