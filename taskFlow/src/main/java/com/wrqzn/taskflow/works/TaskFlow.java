@@ -80,7 +80,6 @@ public class TaskFlow  extends TimerTask
 				try {
 					dd = Class.forName(classPath);
 					task = (Task) dd.newInstance();
-					task.addCommonsParameter(commonsParam);
 					task.setParameter(BaseQuery.run(paramSql));
 				} catch (ClassNotFoundException e) {
 					e.printStackTrace();
@@ -113,7 +112,7 @@ public class TaskFlow  extends TimerTask
 			tasks.get(i).run();
 			if (tasks.get(i).isSuccess()){
 				// success , run next
-				if (i !=0 && i < tasks.size() -1 ) {
+				if ( i < tasks.size() -1 ) {
 					tasks.get(i+1).addPipeArgs(tasks.get(i).getResult());
 				}
 			} else {

@@ -13,7 +13,8 @@ public class Email extends Task {
 	@Override
 	public void run() {
 		result = args;
-		System.out.println( System.currentTimeMillis()+" send eamil to " + args.get("address") );
+
+		System.out.println( System.currentTimeMillis()+" send eamil to " + args.get("address") +" after call " + args.get("lastphone"));
 	}
 
 	@Override
