@@ -33,9 +33,11 @@ parameter_value varchar(100)
 );
 
 -- parameter_type
--- 0: commons parameters  , code/value  is the paramter's code and value
--- 1: the previous task's result as next test's parameter , parameter_code is previous task result code , parameter_value is next task parameter_code
--- 2: input parameters
+-- 0: 通用参数, 所有task 均可使用
+-- 1: pipe , 管道, 上一task的结果作为下一task的输入 , parameter_code: 上一task结果的key , parameter_value:本task的参数key
+-- 2: input parameters , 直接输入参数
+-- 3: 保存結果到taskflow的总结果
+-- 4: 从taskflow总结果中获取数据
 
 
 create table task_timer(

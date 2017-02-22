@@ -1,6 +1,7 @@
 package com.wrqzn.taskflow.works;
 
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +16,10 @@ public abstract class Task {
 	protected Map<String,Object> args = new HashMap<>();
 	protected Map<String,String> pipe_args = new HashMap<>();
 	protected Map<String,Object> result = new HashMap<>();
+
+	protected List<String> saveToFlowResult = new ArrayList<>();
+	protected List<String> getFromFlowResult = new ArrayList<>();
+
 	protected boolean success = true;
 	protected int index;
 
@@ -28,11 +33,24 @@ public abstract class Task {
 	public void setParameter(List<Map<String,Object>> allParameters) {
 		if (null != allParameters && allParameters.size() > 0){
 			for (int i = 0; i < allParameters.size() ; i++) {
-				if (allParameters.get(i).get("parameter_type").equals(1)){
-					pipe_args.put(allParameters.get(i).get("parameter_code").toString(),allParameters.get(i).get("parameter_value").toString());
-				} else if (allParameters.get(i).get("parameter_type").equals(2)){
-					args.put(allParameters.get(i).get("parameter_code").toString(),allParameters.get(i).get("parameter_value"));
+				int type = (int) allParameters.get(i).get("parameter_type");
+				switch (type) {
+					case  1:
+						pipe_args.put(allParameters.get(i).get("parameter_code").toString(),allParameters.get(i).get("parameter_value").toString());
+						break;
+					case 2:
+						args.put(allParameters.get(i).get("parameter_code").toString(),allParameters.get(i).get("parameter_value"));
+						break;
+					case 3:
+						saveToFlowResult.add(allParameters.get(i).get("parameter_code").toString());
+						break;
+					case 4:
+						getFromFlowResult.add(allParameters.get(i).get("parameter_code").toString());
+						break;
+					default:
+						break;
 				}
+
 			}
 		}
 	}
@@ -47,6 +65,13 @@ public abstract class Task {
 		pipe_args.forEach( (k,v) -> {
 			this.args.put(v,previousResult.get(k));
 		});
+
+		for (int i = 0; i < getFromFlowResult.size() ; i++) {
+			if ( null == this.args.get(getFromFlowResult.get(i)) ) {
+				this.args.put(getFromFlowResult.get(i),previousResult.get(getFromFlowResult.get(i)));
+			}
+		}
+
 	}
 
 
@@ -94,4 +119,19 @@ public abstract class Task {
 		this.pipe_args = pipe_args;
 	}
 
+	public List<String> getSaveToFlowResult() {
+		return saveToFlowResult;
+	}
+
+	public void setSaveToFlowResult(List<String> saveToFlowResult) {
+		this.saveToFlowResult = saveToFlowResult;
+	}
+
+	public List<String> getGetFromFlowResult() {
+		return getFromFlowResult;
+	}
+
+	public void setGetFromFlowResult(List<String> getFromFlowResult) {
+		this.getFromFlowResult = getFromFlowResult;
+	}
 }

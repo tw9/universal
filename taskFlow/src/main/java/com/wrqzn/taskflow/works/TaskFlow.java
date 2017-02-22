@@ -22,6 +22,8 @@ public class TaskFlow  extends TimerTask
 	private List<Date> runTime;
 	private Long periods;
 
+	private Map<String,Object> flowResult = new HashMap<>();
+
 
 	public TaskFlow() {
 	}
@@ -72,7 +74,7 @@ public class TaskFlow  extends TimerTask
 						",parameter_code" +
 						",parameter_value" +
 						" from task_input_parameter" +
-						" where parameter_type in (1,2) " +
+						" where parameter_type in (1,2,3,4) " +
 						" and taskflow_id = " + flowId +
 						" and task_id =  " + taskFlowData.get(i).get("task_id") ;
 				Task task= null ;
@@ -110,10 +112,29 @@ public class TaskFlow  extends TimerTask
 		for (int i = 0; i < tasks.size() ; i++) {
 			tasks.get(i).addCommonsParameter(commonsParam);
 			tasks.get(i).run();
+
+//			-- 3: 保存結果到taskflow的总结果
+			for (int j = 0; j < tasks.get(i).getSaveToFlowResult().size() ; j++) {
+				String key = tasks.get(i).getSaveToFlowResult().get(j);
+				flowResult.put(key,tasks.get(i).getResult().get(key));
+			}
+
+
+
 			if (tasks.get(i).isSuccess()){
 				// success , run next
 				if ( i < tasks.size() -1 ) {
-					tasks.get(i+1).addPipeArgs(tasks.get(i).getResult());
+					Map<String,Object> lastResult = tasks.get(i).getResult();
+
+
+					// -- 4: 从taskflow总结果中获取数据
+					for (int j = 0; j < tasks.get(i+1).getGetFromFlowResult().size() ; j++) {
+						String key = tasks.get(i+1).getGetFromFlowResult().get(j);
+						lastResult.put(key,flowResult.get(key));
+					}
+
+					tasks.get(i+1).addPipeArgs(lastResult);
+
 				}
 			} else {
 				// rollback
@@ -187,5 +208,13 @@ public class TaskFlow  extends TimerTask
 
 	public void setFirstRunTime(Date firstRunTime) {
 		this.firstRunTime = firstRunTime;
+	}
+
+	public Map<String, Object> getFlowResult() {
+		return flowResult;
+	}
+
+	public void setFlowResult(Map<String, Object> flowResult) {
+		this.flowResult = flowResult;
 	}
 }
