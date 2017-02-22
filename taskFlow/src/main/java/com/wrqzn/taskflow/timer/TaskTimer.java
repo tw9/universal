@@ -1,6 +1,7 @@
 package com.wrqzn.taskflow.timer;
 
 import com.wrqzn.taskflow.db.dbop.BaseQuery;
+import com.wrqzn.taskflow.db.entity.TaskTimerEntity;
 
 import java.util.*;
 
@@ -11,7 +12,7 @@ import java.util.*;
  */
 public class TaskTimer {
 
-	private Date nextChecktime;
+	private TaskFlowContainer taskFlowContainer = new TaskFlowContainer();
 
 	public void check(){
 
@@ -45,8 +46,9 @@ public class TaskTimer {
 		StringBuilder sqlBuilder = new StringBuilder();
 		sqlBuilder.append(" select");
 		sqlBuilder.append(" id");
-		sqlBuilder.append(" ,task_id");
+		sqlBuilder.append(" ,taskflow_id");
 		sqlBuilder.append(" ,active");
+		sqlBuilder.append(" ,run_period");
 		sqlBuilder.append(" ,start_time");
 		sqlBuilder.append(" ,end_time");
 		sqlBuilder.append(" ,first_run");
@@ -59,16 +61,20 @@ public class TaskTimer {
 		sqlBuilder.append(" ,v7_second");
 		sqlBuilder.append(" from task_timer");
 		sqlBuilder.append(" where active=1 ");
-		sqlBuilder.append(" and start_time >= now() ");
-		sqlBuilder.append(" and end_time < now() ");
+//		sqlBuilder.append(" and start_time >= now() ");
+//		sqlBuilder.append(" and end_time < now() ");
 
 		List<Map<String,Object>>  datas = BaseQuery.run(sqlBuilder.toString());
 
-		System.out.println(datas.size());
-
-
-		//
-		TaskFlowContainer todayTasks = new TaskFlowContainer();
+		List<TaskTimerEntity> timerList = new ArrayList<>();
+		for (int i = 0; i < datas.size() ; i++) {
+			TaskTimerEntity entity = new TaskTimerEntity(datas.get(i));
+			if (entity.canRun()){
+				timerList.add(entity);
+			}
+		}
+		taskFlowContainer.setTaskTimerEntities(timerList);
+		taskFlowContainer.runTask();
 	}
 
 

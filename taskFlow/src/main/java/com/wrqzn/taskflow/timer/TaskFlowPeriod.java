@@ -38,7 +38,7 @@ public class TaskFlowPeriod {
 
 
 
-	private Integer taskId;
+	private Integer taskFlowId;
 	private Date firstRun;
 //	private List<MillisecondPeriod>  year ;
 //	private List<MillisecondPeriod>  month ;
@@ -51,7 +51,7 @@ public class TaskFlowPeriod {
 
 
 	public List<Date> taskFlowPeriod(TaskTimerEntity dbData) {
-		this.taskId = dbData.getTaskId();
+		this.taskFlowId = dbData.getTaskflowId();
 		if (null != dbData.getFirstRun()) {
 			this.firstRun = dbData.getFirstRun();
 		}
@@ -64,7 +64,7 @@ public class TaskFlowPeriod {
 		datas.add(dbData.getDay());
 		datas.add(dbData.getHour());
 		datas.add(dbData.getMinute());
-		datas.add(dbData.getSecond());
+		datas.add(null == dbData.getSecond()?"0":dbData.getSecond());
 
 		List<Integer> calType = new ArrayList<>();
 		calType.add(Calendar.YEAR);
@@ -78,15 +78,23 @@ public class TaskFlowPeriod {
 		List<List<MillisecondPeriod>> result = new ArrayList<>();
 
 		for (int i = 0; i < datas.size(); i++) {
+			if (null == datas.get(i)) {
+				result.add(result.get(i-1));
+				continue;
+			}
 			if (i == 0) {
 				result.add(calcMillis(datas.get(i),calType.get(i),millisecondPeriod));
 			} else {
-				if (result.get(i-1).size()>0){
+				if ( null != result.get(i-1) && result.get(i-1).size()>0){
 					List<MillisecondPeriod> tempResult = new ArrayList<>();
 					for (int j = 0; j < result.get(i-1).size() ; j++) {
 						tempResult.addAll(calcMillis(datas.get(i),calType.get(i),result.get(i-1).get(j)));
 					}
-					result.add(tempResult);
+					if (tempResult.size()>0) {
+						result.add(tempResult);
+					} else {
+						result.add(result.get(i-1));
+					}
 				} else {
 					result.add(calcMillis(datas.get(i),calType.get(i),millisecondPeriod));
 				}
@@ -100,7 +108,7 @@ public class TaskFlowPeriod {
 			Date date = new Date(secondPeriods.get(i).getStart());
 			runTimeList.add(date);
 		}
-		if (firstRun.getTime() >= System.currentTimeMillis() ) {
+		if (null !=firstRun && firstRun.getTime() >= System.currentTimeMillis() ) {
 			runTimeList.add(firstRun);
 		}
 
@@ -150,13 +158,16 @@ public class TaskFlowPeriod {
 			String[] values = value.split("/");
 
 			Calendar cal = Calendar.getInstance();
-			int start = cal.get(fieldType);
-			cal.clear();
-			cal.set(fieldType,start);
+//			int start = cal.get(fieldType);
+			cal.setTimeInMillis(millisecondPeriod.getStart());
+//			cal.set(fieldType,start);
+			long currentTime = System.currentTimeMillis();
 
 			while ( millisecondPeriod.contains(cal.getTimeInMillis()) ) {
-				MillisecondPeriod period = new MillisecondPeriod(cal.getTimeInMillis(),fieldType);
-				periods.add(period);
+				if (cal.getTimeInMillis() > currentTime ) {
+					MillisecondPeriod period = new MillisecondPeriod(cal.getTimeInMillis(),fieldType);
+					periods.add(period);
+				}
 				cal.set(fieldType,cal.get(fieldType)+Integer.valueOf(values[1]));
 			}
 

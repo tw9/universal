@@ -11,13 +11,13 @@ import com.wrqzn.taskflow.works.Task;
 public class SMS extends Task {
 	@Override
 	public void run() {
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		result = args;
-		System.out.println("send sms " + System.currentTimeMillis());
+		System.out.println(System.currentTimeMillis()+" send sms " + args.get("msg"));
 	}
 
 	@Override

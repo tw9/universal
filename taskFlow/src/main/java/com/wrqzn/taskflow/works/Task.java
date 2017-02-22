@@ -2,6 +2,7 @@ package com.wrqzn.taskflow.works;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -23,6 +24,18 @@ public abstract class Task {
 
 	public abstract void run();
 	public abstract void rollback();
+
+	public void setParameter(List<Map<String,Object>> allParameters) {
+		if (null != allParameters && allParameters.size() > 0){
+			for (int i = 0; i < allParameters.size() ; i++) {
+				if (allParameters.get(i).get("parameter_type").equals(1)){
+					pipe_args.put(allParameters.get(i).get("parameter_code").toString(),allParameters.get(i).get("parameter_value").toString());
+				} else if (allParameters.get(i).get("parameter_type").equals(2)){
+					args.put(allParameters.get(i).get("parameter_code").toString(),allParameters.get(i).get("parameter_value"));
+				}
+			}
+		}
+	}
 
 
 	public void addCommonsParameter(Map<String,Object> commonsParam){

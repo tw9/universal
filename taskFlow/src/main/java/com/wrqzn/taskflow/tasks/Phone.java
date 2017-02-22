@@ -11,13 +11,13 @@ import com.wrqzn.taskflow.works.Task;
 public class Phone extends Task {
 	@Override
 	public void run() {
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
 		result = args;
-		System.out.println("make phone call " + System.currentTimeMillis());
+		System.out.println( System.currentTimeMillis() + " make phone call to  " + args.get("number") );
 //		System.out.println( taskFlow.getFlowName() + "make phone call");
 //		success = false;
 //		taskFlow.afterTask(getIndex());

@@ -12,13 +12,8 @@ import com.wrqzn.taskflow.works.Task;
 public class Email extends Task {
 	@Override
 	public void run() {
-		try {
-			Thread.sleep(1100);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 		result = args;
-		System.out.println("send eamil " + System.currentTimeMillis());
+		System.out.println( System.currentTimeMillis()+" send eamil to " + args.get("address") );
 	}
 
 	@Override

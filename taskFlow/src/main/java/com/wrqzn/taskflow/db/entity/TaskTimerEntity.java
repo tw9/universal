@@ -24,11 +24,12 @@ public class TaskTimerEntity {
 //	v7_second varchar(15)
 
 	private Integer id;
-	private Integer taskId;
+	private Integer taskflowId;
 	private boolean active;
 	private Date startTime;
 	private Date endTime;
 	private Date firstRun;
+	private Long runPeriod;
 	private String year;
 	private String month;
 	private String day;
@@ -40,13 +41,15 @@ public class TaskTimerEntity {
 	private Map<String,Object> mapData ;
 
 	public boolean canRun(){
-		if (	   year.equals("")
-				|| month.equals("")
-				|| day.equals("")
-				|| weekday.equals("")
-				|| hour.equals("")
-				|| minute.equals("")
-				|| second.equals("")
+		if ( null != runPeriod  && runPeriod>0 ) {
+			return true;
+		} else if (null != year
+				|| null != month
+				|| null != day
+				|| null != weekday
+				|| null != hour
+				|| null != minute
+				|| null != second
 				) {
 			return true;
 		} else  if (System.currentTimeMillis() <= firstRun.getTime()){
@@ -64,11 +67,12 @@ public class TaskTimerEntity {
 		this.mapData = data;
 
 		this.id = (Integer) verify("id");
-		this.taskId = (Integer) verify("task_id");
+		this.taskflowId = (Integer) verify("taskflow_id");
 		this.active = verify("active").equals(1) ? true :false;
 		this.startTime = (Date) verify("start_time");
 		this.endTime = (Date) verify("end_time");
 		this.firstRun = (Date) verify("first_run");
+		this.runPeriod = null ==  verify("run_period")?0: Long.valueOf( verify("run_period").toString());
 		this.year = (String) verify("v1_year");
 		this.month = (String) verify("v2_month");
 		this.day = (String) verify("v3_day");
@@ -82,7 +86,7 @@ public class TaskTimerEntity {
 		Object obj = mapData.get(key);
 
 		if (null == obj || obj.toString().trim().equals("") ){
-			return "";
+			return null;
 		} else {
 			return obj;
 		}
@@ -97,12 +101,12 @@ public class TaskTimerEntity {
 		this.id = id;
 	}
 
-	public Integer getTaskId() {
-		return taskId;
+	public Integer getTaskflowId() {
+		return taskflowId;
 	}
 
-	public void setTaskId(Integer taskId) {
-		this.taskId = taskId;
+	public void setTaskflowId(Integer taskflowId) {
+		this.taskflowId = taskflowId;
 	}
 
 	public boolean isActive() {
@@ -191,5 +195,13 @@ public class TaskTimerEntity {
 
 	public void setFirstRun(Date firstRun) {
 		this.firstRun = firstRun;
+	}
+
+	public Long getRunPeriod() {
+		return runPeriod;
+	}
+
+	public void setRunPeriod(Long runPeriod) {
+		this.runPeriod = runPeriod;
 	}
 }
