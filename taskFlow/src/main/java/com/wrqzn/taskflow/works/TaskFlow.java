@@ -15,7 +15,9 @@ public class TaskFlow  extends TimerTask
 
 	private int flowId;
 	private String flowName;
-	private List<Task> tasks;
+//	private List<Task> tasks;
+	private Map<Integer,Task> tasks;
+	private List<Integer> rollbacksort;
 	private Map<String,Object> commonsParam;
 
 	private Date firstRunTime;
@@ -59,7 +61,9 @@ public class TaskFlow  extends TimerTask
 			}
 			this.commonsParam = tempCommon;
 
-			List<Task> temptasks = new ArrayList<>();
+//			List<Task> temptasks = new ArrayList<>();
+			Map<Integer,Task> temptasks = new HashMap<>();
+
 			for (int i = 0; i < taskFlowData.size() ; i++) {
 				if (null == taskFlowData.get(i).get("class_path") || taskFlowData.get(i).get("class_path").equals("")) {
 					continue;
@@ -69,6 +73,7 @@ public class TaskFlow  extends TimerTask
 				}
 
 				String classPath = (String) taskFlowData.get(i).get("class_path");
+				Integer taskSortFlag = (Integer) taskFlowData.get(i).get("sort_flag");
 				String paramSql = "select" +
 						" parameter_type" +
 						",parameter_code" +
@@ -76,7 +81,7 @@ public class TaskFlow  extends TimerTask
 						" from task_input_parameter" +
 						" where parameter_type in (1,2,3,4) " +
 						" and taskflow_id = " + flowId +
-						" and sort_id =  " + taskFlowData.get(i).get("sort_flag") ;
+						" and sort_id =  " + taskSortFlag;
 				Task task= null ;
 				Class<?> dd = null;
 				try {
@@ -90,7 +95,11 @@ public class TaskFlow  extends TimerTask
 				} catch (IllegalAccessException e) {
 					e.printStackTrace();
 				}
-				temptasks.add(task);
+				task.setNextTask( taskFlowData.get(i).get("next_task_sort")  );
+				task.setBranchCondition( taskFlowData.get(i).get("branch_condition")  );
+				task.setBranchSort( taskFlowData.get(i).get("branch_task_sort")  );
+				temptasks.put(taskSortFlag,task);
+//				temptasks.add(task);
 			}
 			this.tasks = temptasks;
 		}
@@ -101,52 +110,60 @@ public class TaskFlow  extends TimerTask
 //		this.tasks = tasks;
 //	}
 
-	public TaskFlow(String flowName, List<Task> tasks) {
-		this.flowName = flowName;
-		this.tasks = tasks;
-	}
+//	public TaskFlow(String flowName, List<Task> tasks) {
+//		this.flowName = flowName;
+//		this.tasks = tasks;
+//	}
 
 
 	@Override
 	public void run() {
-		for (int i = 0; i < tasks.size() ; i++) {
-			tasks.get(i).addCommonsParameter(commonsParam);
-			tasks.get(i).run();
+		Task task = tasks.get(0);
+		while (null != task){
+			task.addCommonsParameter(commonsParam);
+			task.run();
 
 //			-- 3: 保存結果到taskflow的总结果
-			for (int j = 0; j < tasks.get(i).getSaveToFlowResult().size() ; j++) {
-				String key = tasks.get(i).getSaveToFlowResult().get(j);
-				flowResult.put(key,tasks.get(i).getResult().get(key));
+			for (int j = 0; j < task.getSaveToFlowResult().size() ; j++) {
+				String key = task.getSaveToFlowResult().get(j);
+				flowResult.put(key,task.getResult().get(key));
 			}
 
 
 
-			if (tasks.get(i).isSuccess()){
+			if (task.isSuccess()){
 				// success , run next
-				if ( i < tasks.size() -1 ) {
-					Map<String,Object> lastResult = tasks.get(i).getResult();
-
-
-					// -- 4: 从taskflow总结果中获取数据
-					for (int j = 0; j < tasks.get(i+1).getGetFromFlowResult().size() ; j++) {
-						String key = tasks.get(i+1).getGetFromFlowResult().get(j);
-						lastResult.put(key,flowResult.get(key));
-					}
-
-					tasks.get(i+1).addPipeArgs(lastResult);
-
+				rollbacksort.add(task.getSortFlag());
+				Integer nextTaskSort = null;
+				if (null == task.getBranchCondition() || "".equals(task.getBranchCondition())) {
+					nextTaskSort = task.getBranchSort();
+				}  else {
+					nextTaskSort = task.getNextTask();
 				}
+				Task nextTask = tasks.get(nextTaskSort);
+
+				Map<String,Object> lastResult = task.getResult();
+
+				// -- 4: 从taskflow总结果中获取数据
+				for (int j = 0; j < nextTask.getGetFromFlowResult().size() ; j++) {
+					String key = nextTask.getGetFromFlowResult().get(j);
+					lastResult.put(key,flowResult.get(key));
+				}
+
+				nextTask.addPipeArgs(lastResult);
+
+				task = nextTask;
 			} else {
 				// rollback
-				rollback(i);
+				rollback();
 				break;
 			}
 		}
 
 	}
 
-	public void rollback(int index){
-		for (int i = index ; i >= 0 ; i--) {
+	public void rollback(){
+		for (int i = rollbacksort.size() ; i >= 0 ; i--) {
 			tasks.get(i).rollback();
 			tasks.get(i).setSuccess(false);
 		}
@@ -170,11 +187,11 @@ public class TaskFlow  extends TimerTask
 		this.flowName = flowName;
 	}
 
-	public List<Task> getTasks() {
+	public Map<Integer, Task> getTasks() {
 		return tasks;
 	}
 
-	public void setTasks(List<Task> tasks) {
+	public void setTasks(Map<Integer, Task> tasks) {
 		this.tasks = tasks;
 	}
 
@@ -216,5 +233,13 @@ public class TaskFlow  extends TimerTask
 
 	public void setFlowResult(Map<String, Object> flowResult) {
 		this.flowResult = flowResult;
+	}
+
+	public List<Integer> getRollbacksort() {
+		return rollbacksort;
+	}
+
+	public void setRollbacksort(List<Integer> rollbacksort) {
+		this.rollbacksort = rollbacksort;
 	}
 }

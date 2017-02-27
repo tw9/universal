@@ -22,6 +22,10 @@ public abstract class Task {
 
 	protected boolean success = true;
 	protected int index;
+	protected Integer sortFlag;
+	protected Integer nextTask ;
+	protected String branchCondition;
+	protected Integer branchSort;
 
 	public Task() {
 	}
@@ -133,5 +137,61 @@ public abstract class Task {
 
 	public void setGetFromFlowResult(List<String> getFromFlowResult) {
 		this.getFromFlowResult = getFromFlowResult;
+	}
+
+	public Integer getNextTask() {
+		return nextTask;
+	}
+
+	public void setNextTask(Object nextTask) {
+		if ( null == nextTask || "".equals( nextTask.toString().trim() )) {
+			this.nextTask = null ;
+		} else {
+			this.nextTask = Integer.valueOf(nextTask.toString());
+		}
+	}
+
+	public void setNextTask(Integer nextTask) {
+		this.nextTask = nextTask;
+	}
+
+	public String getBranchCondition() {
+		return branchCondition;
+	}
+
+	public void setBranchCondition(Object branchCondition) {
+		if (null == branchCondition || "".equals(branchCondition.toString().trim())) {
+			this.branchCondition = null ;
+		} else {
+			this.branchCondition =  branchCondition.toString() ;
+		}
+	}
+
+	public Integer getBranchSort() {
+		return branchSort;
+	}
+
+	public void setBranchSort(Object branchSort) {
+		if (null == branchSort || "".equals(branchSort.toString().trim())) {
+			this.branchSort = null;
+		} else {
+			this.branchSort = Integer.valueOf( branchSort.toString() );
+		}
+	}
+
+	public Integer getSortFlag() {
+		return sortFlag;
+	}
+
+	public void setSortFlag(Integer sortFlag) {
+		this.sortFlag = sortFlag;
+	}
+
+	public void setBranchCondition(String branchCondition) {
+		this.branchCondition = branchCondition;
+	}
+
+	public void setBranchSort(Integer branchSort) {
+		this.branchSort = branchSort;
 	}
 }

@@ -38,6 +38,9 @@ public class TaskFlowContainer {
 				",a.sort_flag" +
 				",b.class_path" +
 				",c.name "+
+				",a.next_task_sort "+
+				",a.branch_condition"+
+				",a.branch_task_sort"+
 				" from taskflow_task a " +
 				" left join task b " +
 				"  on a.task_id = b.id " +

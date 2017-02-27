@@ -20,7 +20,10 @@ create table taskflow_task(
 id int,
 taskflow_id int,
 task_id int,
-sort_flag int
+sort_flag int,
+next_task_sort int,
+branch_condition varchar(20),
+branch_task_sort int,
 );
 
 create table task_input_parameter(
