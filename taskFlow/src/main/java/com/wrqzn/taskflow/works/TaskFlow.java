@@ -151,7 +151,6 @@ public class TaskFlow  extends TimerTask
 					while (m.find()) {
 						String strm = m.group();
 						String str = strm.substring(1,strm.length()-1);
-						System.out.println(str);
 						if ( null != task.getResult().get(str) ) {
 							condition = condition.replace(strm,task.getResult().get(str).toString());
 						} else if ( null != this.flowResult.get(str) ){

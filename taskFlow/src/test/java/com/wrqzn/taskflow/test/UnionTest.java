@@ -11,6 +11,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -111,6 +112,14 @@ public class UnionTest {
 		}
 
 	}
+
+
+	@Test
+	public void testeee(){
+		Calendar calendar = Calendar.getInstance();
+		System.out.println(calendar.get(Calendar.HOUR_OF_DAY));
+	}
+
 
 
 

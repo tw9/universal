@@ -2,6 +2,8 @@ package com.wrqzn.taskflow.tasks;
 
 import com.wrqzn.taskflow.works.Task;
 
+import java.util.Calendar;
+
 
 /**
  * Created by WANG, RUIQING on 1/9/17
@@ -21,6 +23,8 @@ public class Phone extends Task {
 //		System.out.println( taskFlow.getFlowName() + "make phone call");
 //		success = false;
 //		taskFlow.afterTask(getIndex());
+		Calendar calendar = Calendar.getInstance();
+		this.result.put("hour",calendar.get(Calendar.HOUR_OF_DAY));
 	}
 
 	@Override
