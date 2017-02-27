@@ -25,7 +25,7 @@ sort_flag int
 
 create table task_input_parameter(
 id int,
-task_id int,
+sort_id int,
 taskflow_id int,
 parameter_type int,
 parameter_code varchar(30),

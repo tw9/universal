@@ -76,7 +76,7 @@ public class TaskFlow  extends TimerTask
 						" from task_input_parameter" +
 						" where parameter_type in (1,2,3,4) " +
 						" and taskflow_id = " + flowId +
-						" and task_id =  " + taskFlowData.get(i).get("task_id") ;
+						" and sort_id =  " + taskFlowData.get(i).get("sort_flag") ;
 				Task task= null ;
 				Class<?> dd = null;
 				try {

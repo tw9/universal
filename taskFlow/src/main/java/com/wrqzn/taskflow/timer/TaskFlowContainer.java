@@ -34,6 +34,7 @@ public class TaskFlowContainer {
 		String sql = "select " +
 				" a.taskflow_id" +
 				",a.task_id" +
+				",a.sort_flag"+
 				",a.sort_flag" +
 				",b.class_path" +
 				",c.name "+
