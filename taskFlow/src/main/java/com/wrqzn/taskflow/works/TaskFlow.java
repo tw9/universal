@@ -2,7 +2,12 @@ package com.wrqzn.taskflow.works;
 
 import com.wrqzn.taskflow.db.dbop.BaseQuery;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by WANG, RUIQING on 1/9/17
@@ -17,7 +22,7 @@ public class TaskFlow  extends TimerTask
 	private String flowName;
 //	private List<Task> tasks;
 	private Map<Integer,Task> tasks;
-	private List<Integer> rollbacksort;
+	private List<Integer> rollbacksort= new ArrayList<>();
 	private Map<String,Object> commonsParam;
 
 	private Date firstRunTime;
@@ -135,13 +140,46 @@ public class TaskFlow  extends TimerTask
 				// success , run next
 				rollbacksort.add(task.getSortFlag());
 				Integer nextTaskSort = null;
-				if (null == task.getBranchCondition() || "".equals(task.getBranchCondition())) {
-					nextTaskSort = task.getBranchSort();
+				if (null != task.getBranchCondition() && !"".equals(task.getBranchCondition()) ) {
+
+					String condition = task.getBranchCondition();
+
+					String pattern = "\\$\\w*\\$";
+					Pattern r = Pattern.compile(pattern);
+					Matcher m = r.matcher(condition);
+
+					while (m.find()) {
+						String strm = m.group();
+						String str = strm.substring(1,strm.length()-1);
+						System.out.println(str);
+						if ( null != task.getResult().get(str) ) {
+							condition = condition.replace(strm,task.getResult().get(str).toString());
+						} else if ( null != this.flowResult.get(str) ){
+							condition = condition.replace(strm,this.flowResult.get(str).toString());
+						} else {
+							break;
+						}
+					}
+					ScriptEngineManager manager = new ScriptEngineManager();
+					ScriptEngine engine = manager.getEngineByName("javascript");
+					boolean flag = false;
+					try {
+						flag = (boolean) engine.eval(condition);
+					} catch (ScriptException e) {
+						e.printStackTrace();
+					}
+					if (flag) {
+						nextTaskSort = task.getBranchSort();
+					} else {
+						nextTaskSort = task.getNextTask();
+					}
 				}  else {
 					nextTaskSort = task.getNextTask();
 				}
 				Task nextTask = tasks.get(nextTaskSort);
-
+				if (null == nextTask ) {
+					break;
+				}
 				Map<String,Object> lastResult = task.getResult();
 
 				// -- 4: 从taskflow总结果中获取数据
